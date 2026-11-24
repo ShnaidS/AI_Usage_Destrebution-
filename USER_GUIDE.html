@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="User guide for the AI Usage Analyzer desktop and web application: setup, model selection, analysis, optimization, costs, settings, and exports.">
+  <title>AI Usage Analyzer | User Guide</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #20243a;
+      --muted: #59617a;
+      --accent: #6635b7;
+      --border: #dce1ec;
+      --paper: #fff;
+      --soft: #f3f5fa;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+    body { margin: 0; background: var(--soft); color: var(--ink); font: 16px/1.65 "Segoe UI", Arial, sans-serif; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .skip { position: absolute; top: -80px; left: 16px; padding: 8px; background: white; z-index: 2; }
+    .skip:focus { top: 8px; }
+    header { padding: 52px max(24px, calc((100% - 1120px) / 2)); background: #29213f; color: white; }
+    header p { max-width: 760px; color: #e2d9f4; }
+    h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; }
+    .eyebrow { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; }
+    .version { display: inline-block; padding: 4px 12px; border: 1px solid #786594; border-radius: 20px; font-size: 0.85rem; }
+    .layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 30px; max-width: 1180px; margin: 0 auto; padding: 32px 24px 60px; }
+    nav { align-self: start; position: sticky; top: 20px; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--paper); }
+    nav h2 { margin: 0 0 10px; font-size: 1rem; }
+    nav a { display: block; padding: 5px 0; text-decoration: none; font-size: 0.9rem; }
+    main { min-width: 0; }
+    section { margin-bottom: 24px; padding: 26px; border: 1px solid var(--border); border-radius: 12px; background: var(--paper); }
+    h2 { margin: 0 0 16px; font-size: 1.5rem; line-height: 1.3; }
+    h3 { margin: 24px 0 8px; font-size: 1.1rem; }
+    p { margin: 10px 0; }
+    ul, ol { padding-left: 24px; }
+    li { margin: 8px 0; }
+    code, kbd { font-family: Consolas, "Courier New", monospace; font-size: 0.9em; }
+    code { padding: 2px 5px; background: #edf0f7; border-radius: 4px; overflow-wrap: anywhere; }
+    pre { padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: #f5f6fb; overflow-x: auto; line-height: 1.5; }
+    pre code { padding: 0; background: none; overflow-wrap: normal; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; margin: 16px 0; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: #eee8f8; font-weight: 600; }
+    caption { margin-bottom: 8px; text-align: left; font-weight: 600; }
+    .note, .warning { margin: 18px 0; padding: 14px 18px; border-left: 4px solid var(--accent); background: #f4effb; border-radius: 0 6px 6px 0; }
+    .warning { border-left-color: #9c610a; background: #fff6e6; }
+    .muted, footer { color: var(--muted); font-size: 0.9rem; }
+    .workflow { font-weight: 600; color: var(--accent); }
+    details { border-top: 1px solid var(--border); padding: 14px 0; }
+    summary { cursor: pointer; font-weight: 600; }
+    footer { padding: 0 24px 32px; text-align: center; }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; gap: 20px; padding: 20px 14px; }
+      nav { position: static; }
+      section { padding: 20px; }
+      header { padding: 34px 24px; }
+    }
+    @media print {
+      body { background: white; font-size: 10pt; }
+      header { padding: 0 0 20px; background: white; color: black; }
+      header p { color: #333; }
+      .version { border-color: #999; }
+      .layout { display: block; max-width: none; padding: 0; }
+      nav, .skip { display: none; }
+      section { border: 0; border-radius: 0; padding: 14px 0; margin: 0; }
+      h2, h3, caption { break-after: avoid; }
+      tr, pre, .note, .warning { break-inside: avoid; }
+      a { color: black; }
+      footer { padding: 20px 0 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to guide</a>
+  <header>
+    <div class="eyebrow">Analyze. Understand. Optimize.</div>
+    <h1>AI Usage Analyzer<br>User Guide</h1>
+    <p>Estimate repository token costs, inspect recorded AI activity, and review model-specific optimization savings with GitHub Copilot and Claude Code.</p>
+    <span class="version">Version 1.0.0 &middot; Updated November 22, 2026</span>
+  </header>
+  <div class="layout">
+    <nav aria-label="Guide contents">
+      <h2>Contents</h2>
+      <a href="#quick-start">1. Quick start</a>
+      <a href="#installation">2. Install and launch</a>
+      <a href="#models">3. Choose your models</a>
+      <a href="#static">4. Static Analysis</a>
+      <a href="#dynamic">5. Dynamic Analysis</a>
+      <a href="#optimization">6. Optimization</a>
+      <a href="#costs">7. Tokens, credits, and USD</a>
+      <a href="#dashboard">8. Dashboard</a>
+      <a href="#sessions">9. Save and load</a>
+      <a href="#exports">10. Export reports</a>
+      <a href="#settings">11. Settings and tooltips</a>
+      <a href="#privacy">12. Privacy and limitations</a>
+      <a href="#troubleshooting">13. Troubleshooting</a>
+    </nav>
+    <main id="main">
+      <section id="quick-start">
+        <h2>1. Quick start</h2>
+        <p class="workflow">Choose a coding model &rarr; Static Analysis &rarr; Dynamic Analysis &rarr; Optimization &rarr; Save or export</p>
+        <ol>
+          <li>Launch the installed app from the Start menu, run the portable executable from its application folder, or use <code>start.bat</code> from a source checkout.</li>
+          <li>Above the tab menu, set <strong>The code will run with</strong> to the coding provider and model whose costs you want to estimate.</li>
+          <li>Open <strong>Static Analysis</strong>, paste your repository's absolute folder path, and select <strong>Analyze</strong>.</li>
+          <li>Open <strong>Dynamic Analysis</strong>, enter a supported session-log folder, and select <strong>Analyze</strong>. Add the repository path if you want to filter relevant sessions and compare usage.</li>
+          <li>Open <strong>Optimization</strong>, choose standard or <strong>Deep Analysis</strong>, and select <strong>Generate Optimization Suggestions</strong>.</li>
+          <li>Review proposed changes and savings. Use <strong>Save Analyses</strong> for a restorable snapshot or an export button for a shareable report.</li>
+        </ol>
+        <aside class="note"><strong>Static analysis works on its own.</strong> You only need both static and dynamic results when using the Optimization Advisor.</aside>
+      </section>
+
+      <section id="installation">
+        <h2>2. Install and launch</h2>
+        <h3>Windows MSI or portable application</h3>
+        <p>On Windows x64, run the MSI to install for your user account, then open <strong>AI Usage Analyzer</strong> from the Start menu. To use the portable build instead, keep its entire application folder together and open <code>AI-Usage-Analyzer.exe</code> inside it. The executable requires the other files in that folder. Both packages include Node.js and production dependencies; Windows 10/11, .NET Framework 4, and a web browser are required. The launcher opens the default browser using an available local port. An unsigned build may trigger a Windows security warning; only run packages you trust.</p>
+        <p>Packaged-app settings and credentials are stored in <code>%LOCALAPPDATA%\AI Usage Analyzer\.env</code>; saved analyses and session state are stored in the <code>Session</code> and <code>session_state</code> subfolders there. Uninstalling the MSI leaves this private data in place. Delete it manually only if you no longer need it. The packaged launcher does not open command windows.</p>
+        <h3>Requirements</h3>
+        <ul>
+          <li>Windows, a current web browser, and read access to the repository and session-log folders.</li>
+          <li>Node.js 20.19 or newer in the 20.x series, or Node.js 22.12 or newer, with npm available.</li>
+          <li>For cloud optimization only: a Copilot-enabled account or an Anthropic API key, plus network access.</li>
+        </ul>
+        <h3>First-time setup from source</h3>
+        <p>Open PowerShell in the project root and install dependencies for both application components:</p>
+        <pre><code>Push-Location .\backend
+npm.cmd ci
+Pop-Location
+Push-Location .\frontend
+npm.cmd ci
+Pop-Location
+.\start.bat</code></pre>
+        <p>The launcher starts two development-server windows and opens <a href="http://localhost:5173">http://localhost:5173</a>. The backend normally listens on port <code>4000</code>. If the browser opens before startup finishes, wait for the servers to be ready and refresh. Select <strong>Exit</strong> in the app to stop both servers and close the windows created by the launcher; unrelated terminals are not closed. Servers started manually must be stopped in their own terminals. The launcher does not watch backend source files for changes; restart it after backend edits.</p>
+        <h3>Manual startup</h3>
+        <p>Alternatively, run these commands in two separate PowerShell windows opened at the project root:</p>
+        <pre><code># Window 1
+Set-Location .\backend
+npx.cmd tsx src/server.ts
+
+# Window 2
+Set-Location .\frontend
+npm.cmd run dev</code></pre>
+        <p>Use <code>npm.cmd</code> if PowerShell blocks <code>npm.ps1</code>. If a port is already in use, inspect the server output rather than stopping unrelated processes.</p>
+        <h3>Leaving the app</h3>
+        <p>Save your analyses, then select <strong>Exit</strong> to request backend shutdown. Your browser may refuse to close the tab automatically; close it manually if necessary. Development-server or watcher windows may remain open; use <kbd>Ctrl</kbd>+<kbd>C</kbd> in those windows when finished.</p>
+      </section>
+
+      <section id="models">
+        <h2>3. Choose your models</h2>
+        <p>There are two separate selectors. They serve different purposes.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Control</th><th scope="col">Purpose</th><th scope="col">Location</th></tr></thead>
+            <tbody>
+              <tr><td><strong>The code will run with</strong></td><td>Sets the assumed coding model for static token estimates, all analysis costs, and projected optimization savings. Dynamic costs apply its rates to recorded token counts.</td><td>Immediately above the Dashboard / Static Analysis / Dynamic Analysis / Optimization menu.</td></tr>
+              <tr><td><strong>Optimization LLM</strong></td><td>Chooses the provider that generates cloud optimization suggestions. It does not choose the model used to price your code.</td><td>App header.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The coding-model dropdown currently contains:</p>
+        <ul>
+          <li><strong>GitHub Copilot:</strong> Claude Opus 4.8, Claude Sonnet 4.6, and GPT-5.3 Codex.</li>
+          <li><strong>Claude Code:</strong> Claude Opus 4.8 and Claude Sonnet 4.6.</li>
+          <li><strong>Ollama Cloud:</strong> run Static Analysis on the target repository first. Detected candidates appear in the dropdown; select one and rerun Static Analysis. Selection does not confirm the code actually invokes it.</li>
+        </ul>
+        <p>Open <strong>Settings</strong> with the gear icon to the right of Exit in the header. The Settings popup contains the User Guide link, key replacement, and analysis preferences.</p>
+        <p>Check the provider group when selecting Claude models: the same model can appear under both providers. This list is the app's supported pricing catalog, not every model available from the providers.</p>
+        <aside class="note"><strong>Not a runtime setting:</strong> this selector does not run your repository, configure your IDE, or switch the model in an external coding assistant. It changes the assumptions used for estimates.</aside>
+        <p>Changing the coding model clears current static and optimization results; rerun static analysis for the new model. Existing dynamic costs refresh automatically without rereading logs. Recorded token counts and logged model names are retained; costs are selected-model scenarios, not historical bills. Changing the Optimization LLM currently clears the analysis results as well, so choose it before starting or save a snapshot first.</p>
+        <p>Ollama detection looks for quoted cloud-tagged literals or cloud-tagged <code>ollama run</code> and <code>ollama pull</code> commands, literal model settings in files containing an <code>ollama.com</code> endpoint, and Ollama-named model settings in other files when such an endpoint exists. These are uncertain candidates and may be unrelated. Dynamic configuration, other unquoted values, unsupported files and excluded files may be missed. Files beginning <code>.env</code> are not scanned; no repository code is executed.</p>
+        <h3>Cloud optimization authentication</h3>
+        <p><strong>GitHub Copilot:</strong> use Copilot CLI sign-in, stored GitHub CLI credentials for an account with Copilot access, or a backend <code>COPILOT_GITHUB_TOKEN</code> environment variable. An ordinary GitHub token without Copilot access is insufficient. Optionally set <code>COPILOT_MODEL</code> in the configured <code>.env</code> file to a model available to your account; otherwise Copilot chooses its default.</p>
+        <p>Copilot optimization retains SDK sessions using the base directory <code>%USERPROFILE%\.copilot</code>; workspaces are normally under <code>%USERPROFILE%\.copilot\session-state\&lt;session-id&gt;</code>. They can contain source excerpts, prompts, and responses, so protect them as private data. Storage does not guarantee token usage is recorded or compatible with Dynamic Analysis, and previously deleted sessions cannot be restored by enabling it.</p>
+        <p><strong>Claude Code:</strong> configure <code>ANTHROPIC_API_KEY</code> in the backend environment or <code>backend\.env</code>. A Claude web subscription does not replace an API key for this integration.</p>
+        <p>Restart the backend after manually changing environment settings. Keys replaced through Settings take effect immediately. Never commit credentials. The coding-model cost selector does not change the cloud optimizer's backend model configuration.</p>
+      </section>
+
+      <section id="static">
+        <h2>4. Static Analysis</h2>
+        <ol>
+          <li>Select the coding model above the tab menu.</li>
+          <li>In <strong>Settings</strong>, decide whether to exclude generated files and lockfiles. Exclusion is enabled by default.</li>
+          <li>Open <strong>Static Analysis</strong> and enter an absolute directory path such as <code>D:\Projects\MyApplication</code>. Paste the path without surrounding quotes.</li>
+          <li>Select <strong>Analyze</strong>. The progress area shows the current file, scan counts, and an estimated remaining time when enough progress has been measured.</li>
+        </ol>
+        <p>Results include file and line counts, estimated tokens, a language breakdown, the largest files, platform metrics, and general optimization suggestions. Excluded detected lockfiles are listed separately.</p>
+        <p><strong>Cost basis:</strong> the static USD amount estimates one uncached input pass over the counted repository text. It is not a forecast of the full cost to develop the project, generate all its code, or conduct repeated sessions.</p>
+        <h3>What is scanned?</h3>
+        <p>Supported extensions include Python, JavaScript/JSX, TypeScript/TSX, Java, Go, C#, C++, Rust, JSON, YAML, TOML, Markdown, text, and Terraform; <code>Dockerfile</code> is also recognized. Unsupported file types are not counted.</p>
+        <p>The scanner skips <code>node_modules</code>, <code>.git</code>, <code>dist</code>, <code>build</code>, and <code>vendor</code> directories, files larger than 2 MiB, and files containing null bytes. The generated-file setting does not override these exclusions.</p>
+        <p><strong>Clear</strong> removes the repository path and current static results, including the associated optimization result. It does not delete repository files.</p>
+      </section>
+
+      <section id="dynamic">
+        <h2>5. Dynamic Analysis</h2>
+        <p>Dynamic analysis reads supported local AI session logs. It does not retrieve provider billing records.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Field</th><th scope="col">What to enter</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Session Files Path</strong></td><td>An existing directory containing Claude Code <code>.jsonl</code> history or legacy Copilot CLI session folders with <code>events.jsonl</code>. For Claude, an example is <code>C:\Users\YourName\.claude\projects</code>. Replace <code>YourName</code> with your Windows account folder.</td></tr>
+              <tr><td><strong>Code Repository Path</strong> (optional)</td><td>An existing repository directory. The Static Analysis path is copied here as you enter it; you may edit or clear this field. This retains sessions with recognized code-creation/edit tools targeting that directory and attempts a static-size comparison. Omitting it includes all supported discovered sessions.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Select <strong>Analyze</strong>. Discovery searches subdirectories to a bounded depth. Use a closer parent folder if logs are nested too deeply. Enter expanded absolute paths; do not assume placeholders such as <code>%USERPROFILE%</code> are expanded in the input box.</p>
+        <h3>Reading the results</h3>
+        <ul>
+          <li><strong>Input/output/cache tokens:</strong> Claude usage fields come from supported logs. Copilot input tokens are estimated from content; its supported output-token values come from the logs.</li>
+          <li><strong>Backend Models Used in Sessions:</strong> shows recorded model names for history. Cost estimates use the coding-model selector, not those historical model names. Recorded token counts are not retokenized.</li>
+          <li><strong>Sessions:</strong> lists up to 10 highest-token sessions. Select <strong>View flow</strong> for available prompts, touched files, tool usage, and a session PDF export.</li>
+          <li><strong>Daily usage:</strong> groups recorded activity by date.</li>
+          <li><strong>Actual Usage vs. Codebase Estimate:</strong> compares input-plus-output usage with static repository size. A ratio above 1 is possible because sessions can load context repeatedly; it is not, by itself, proof of waste.</li>
+        </ul>
+        <aside class="warning"><strong>Filtering is session-level.</strong> A repository filter selects matching sessions and trims some file/tool details; it does not isolate a precise per-repository share of every token in a mixed-purpose session.</aside>
+        <p>Current desktop Copilot binary storage under <code>%LOCALAPPDATA%\github-copilot\pc\chat-agent-sessions</code> is not supported. Microsoft 365 Copilot audit/Graph dynamic exports are not supported in this interface.</p>
+      </section>
+
+      <section id="optimization">
+        <h2>6. Optimization</h2>
+        <p>First run or load <strong>both Static Analysis and Dynamic Analysis</strong>. The advisor combines repository information with the supplied usage report.</p>
+        <ol>
+          <li>Confirm the <strong>Optimization LLM</strong> provider in the header and the coding model used for savings estimates.</li>
+          <li>Leave <strong>Deep Analysis</strong> unchecked for standard mode: up to 100 prioritized files and up to 500 suggestions. Enable it to review all eligible nonempty scanned files without the overall suggestion cap. Cloud prompts still use bounded context.</li>
+          <li>Select <strong>Generate Optimization Suggestions</strong>. Progress and ETA apply to measured processing stages; cloud response time may remain unknown.</li>
+          <li>Review token savings, estimated USD savings, Copilot credit savings where applicable, priority, confidence, maintainability, and CPU/memory/response-time impact.</li>
+          <li>Select <strong>Show Change</strong> to compare before/after code. Some suggestions are structural guidance and do not have a single replacement snippet.</li>
+          <li>Use <strong>Verify Change</strong> or <strong>Verify All Changes</strong> for advisory checks, then sort or page through results.</li>
+        </ol>
+        <p>Cloud provider failures, including missing or rejected credentials, appear in a popup with guidance. Update the key in Settings or check Copilot sign-in, then generate again. Local heuristic recommendations are retained where possible and identified in the popup; a report marked local fallback or standard confidence is not a successful cloud research run. If the optimization request itself fails, no new report is generated.</p>
+        <h3>Reading the result summary</h3>
+        <p><strong>Suggestions generated by</strong> identifies the advisor provider and whether the report used cloud research or an offline fallback. This report-level status is separate from the confidence rating of each recommendation. <strong>Pricing model</strong> identifies the coding model used to convert projected token savings into USD and, for Copilot, AI Credits.</p>
+        <p><strong>Total projected savings</strong> adds the estimated token and USD savings from the returned suggestions, across all pages. The suggestion count is not a count of unique files: one file can have several recommendations. These totals describe the current report, not a daily or monthly saving, and do not mean changes have already been applied. GitHub AI Credits are shown only for Copilot pricing.</p>
+        <p><strong>Average CPU, memory, and response-time savings</strong> are unweighted arithmetic means of the percentage changes estimated for each recommendation. Decreases count as positive savings; increases are labeled as increases. They are model-generated projections, not measured benchmarks. If values cannot be computed, the interface shows Unavailable.</p>
+        <h3>Understanding each result column</h3>
+        <p>Click the small <strong>?</strong> beside any optimization column header for a short explanation. Click outside the popup or press <strong>Escape</strong> to close it.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Optimization results explained</caption>
+            <thead><tr><th scope="col">Column / field</th><th scope="col">Meaning and how to use it</th></tr></thead>
+            <tbody>
+              <tr><td><strong>File Name</strong></td><td>The source file targeted by the recommendation. Check the current file before editing; a saved recommendation may refer to an older version.</td></tr>
+              <tr><td><strong>Lines</strong></td><td>The original line range to inspect. <strong>Structural Improvement</strong> means broader refactoring guidance rather than a ready-to-paste replacement.</td></tr>
+              <tr><td><strong>Performance Effect</strong></td><td>Projected CPU, memory, and response-time changes, with an explanation for each. An upward arrow means an increase; a downward arrow means a decrease. Lower resource use or response time is generally desirable, but read the explanation and measure the actual result.</td></tr>
+              <tr><td><strong>Tokens</strong></td><td>The estimated number and percentage of tokens avoided by this suggestion. This is a source/context estimate, not proof that every future prompt or session will use that many fewer tokens.</td></tr>
+              <tr><td><strong>Impact: Priority</strong></td><td>A High, Medium, or Low ranking for reviewing the recommendation. High priority is not a safety approval; verify the change before applying it.</td></tr>
+              <tr><td><strong>Impact: Confidence</strong></td><td>The advisor's qualitative confidence in the recommendation. High does not mean a measured probability or guaranteed correctness; Low calls for especially careful review.</td></tr>
+              <tr><td><strong>Impact: Maintainability</strong></td><td>The estimated degree of maintainability impact, rated High, Medium, or Low. Read <strong>Change Details</strong> to understand the intended benefit and tradeoffs. These labels are not verification verdicts, even if they use similar colors.</td></tr>
+              <tr><td><strong>Est. USD / GitHub AI Credit savings</strong></td><td>The suggested input-token reduction priced using the report's coding model. Claude results show USD, not GitHub credits. <strong>Unavailable</strong> means the app cannot calculate a supported estimate, not that the saving is zero.</td></tr>
+              <tr><td><strong>Change Details</strong></td><td>The rationale for the proposed change. Use it to decide whether the recommendation fits the file's actual purpose and constraints.</td></tr>
+              <tr><td><strong>AI Prompt</strong></td><td>A suggested instruction for implementing the refactor with a coding assistant. It is guidance, not a record that the instruction has been executed.</td></tr>
+              <tr><td><strong>Action</strong></td><td><strong>Show Change</strong> opens the proposed before/after view. <strong>Verify Change</strong> runs local advisory checks and displays a verdict and explanation. Neither action applies the change.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Verification results and traffic lights</h3>
+        <p>Verification uses local rule-based checks on the suggestion and file type. It does not compile or execute your project, run its tests, or prove that the replacement preserves behavior.</p>
+        <ul>
+          <li><strong>Critical (red):</strong> a known high-risk pattern was detected, such as comments proposed for JSON or removal of required syntax. Do not apply the proposed edit as written; inspect and correct it.</li>
+          <li><strong>Medium (amber):</strong> contextual review is required. Identical lines can have different purposes, so removing one may delete meaningful behavior or data.</li>
+          <li><strong>OK (green):</strong> the local checks did not flag a covered issue, or the suggestion is structural guidance without a generated edit. This is not a guarantee of safety.</li>
+          <li><strong>The change was not verified:</strong> no verification result is available yet. Use <strong>Verify Change</strong> for one row or <strong>Verify All Changes</strong> for every suggestion, including other pages. A verification error is not an OK verdict.</li>
+        </ul>
+        <h3>Sorting, paging, and choosing what to apply</h3>
+        <p>Click <strong>Filter</strong> beside <strong>Sort By</strong> to open a popup with three sidebar categories. In <strong>Performance Effect</strong>, CPU, Memory, Response Time, and Tokens each have one 0&ndash;100 percent track with separate minimum and maximum handles. Drag either handle, or focus it and use the keyboard arrow keys. A changed range matches decreases (or token savings) within its inclusive bounds. Unchanged 0&ndash;100 means no restriction. Checking <strong>Increases</strong> disables that metric's handles and matches any positive increase regardless of percentage; for tokens this means negative token savings. Unchecking restores the saved range.</p>
+        <p>In <strong>Impact</strong>, Priority, Confidence, and Maintainability each offer High, Medium, and Low checkboxes. <strong>Change Verification status</strong> offers OK, Medium, Critical, and Not Verified; Not Verified includes pending checks and failed requests without a completed verdict. Row errors remain visible. Within a checkbox group, any selected value matches; no selections means no restriction. Different groups and active metric ranges must all match.</p>
+        <p>Filters update results immediately across the full report before pagination. The popup shows matching versus total suggestions. Close it using <strong>Show results</strong>, <strong>Close</strong>, Escape, or the backdrop; selections are retained. Use <strong>Clear filters</strong> to restore every row. Filters affect only the table: projected totals, exports, and <strong>Verify All Changes</strong> still cover the full report, including hidden rows. The Performance Effect, Impact, and Action help popups explain each displayed item separately.</p>
+        <p><strong>Verify All Changes</strong> processes every suggestion with at most four requests at a time, including rows on other pages. The progress summary shows how many checks finished, how many returned verdicts, and how many failed. A Critical or Medium verdict counts as a completed verification, not a failed request. Failed rows display their error; retry them with <strong>Verify Change</strong>, or rerun the full set. Generating new suggestions and exporting results are disabled while verification is running so the report is not replaced or exported partway through the checks.</p>
+        <p>Results display 50 suggestions per page. Use <strong>Previous</strong> and <strong>Next</strong> to navigate. <strong>Sort By</strong> orders the full report by Name, tokens saved (currently labeled <strong>Tocken Saved</strong>), or Verification Status; the arrow toggles ascending and descending order. Sorting by verification is not sorting by priority or savings. Excel and PDF exports include all suggestions, not only the current page.</p>
+        <p>Start with recommendations that combine useful savings, a clear rationale, and manageable risk. Inspect the before/after code, read any verification explanation, then apply one coherent change at a time and test it. If two rows target the same lines or refactor the same logic, choose compatible changes and reassess the savings rather than applying both blindly.</p>
+        <h3>Example: interpreting a savings result</h3>
+        <p>A suggestion showing <strong>10,000 tokens saved</strong> with <strong>Claude Sonnet 4.6</strong> pricing represents about <strong>$0.03</strong> of avoided uncached input at the bundled $3-per-million rate. Under the Copilot Sonnet profile, that is also <strong>3 AI Credits</strong>. It is not a $0.03 monthly saving unless your actual usage avoids those tokens once each month; repeated context loading can change realized savings.</p>
+        <aside class="warning"><strong>Review before applying.</strong> Suggestions and verification results are advisory, not proof of correctness or measured runtime benchmarks. The preview does not edit your source. Apply chosen changes separately and run your own tests.</aside>
+        <p>Projected savings price the estimated <em>input tokens avoided</em> using the coding-model selection. They do not measure cash refunded, include the optimizer's own cloud charge, or guarantee that overlapping suggestions can be added together without double counting.</p>
+      </section>
+
+      <section id="costs">
+        <h2>7. Understand tokens, credits, and USD</h2>
+        <p>Prices below describe the app's current built-in standard text-token rates. They are not fetched live and may change at the provider. Amounts are USD per one million tokens.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Supported pricing profiles</caption>
+            <thead><tr><th scope="col">Provider / model</th><th scope="col">Input</th><th scope="col">Cache read</th><th scope="col">Cache write</th><th scope="col">Output</th></tr></thead>
+            <tbody>
+              <tr><td>Copilot or Claude Code / Opus 4.8</td><td>$5.00</td><td>$0.50</td><td>$6.25</td><td>$25.00</td></tr>
+              <tr><td>Copilot or Claude Code / Sonnet 4.6</td><td>$3.00</td><td>$0.30</td><td>$3.75</td><td>$15.00</td></tr>
+              <tr><td>Copilot / GPT-5.3 Codex</td><td>$1.75</td><td>$0.175</td><td>Not applicable</td><td>$14.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre><code>USD = (input tokens x input rate
+     + output tokens x output rate
+     + cache-read tokens x cache-read rate
+     + cache-write tokens x cache-write rate) / 1,000,000
+
+GitHub Copilot AI Credits = USD / 0.01</code></pre>
+        <p>Input, cache-read, and cache-write categories are priced separately. GitHub credits are rounded for reporting, so tiny savings can show zero credits even when USD is nonzero.</p>
+        <h3>Sonnet example</h3>
+        <p>For <strong>100,000 input tokens</strong> and <strong>20,000 output tokens</strong>, with no cache usage:</p>
+        <pre><code>Input:   100,000 / 1,000,000 x $3  = $0.30
+Output:   20,000 / 1,000,000 x $15 = $0.30
+Total:                              $0.60
+Copilot equivalent:                 60 AI Credits</code></pre>
+        <p>For Claude Code, report <strong>$0.60</strong>, not GitHub credits. A static scan of only the 100,000 input tokens would report <strong>$0.30</strong>.</p>
+        <h3>Important distinctions</h3>
+        <ul>
+          <li><strong>Claude Code:</strong> USD is an API-rate equivalent, not a per-token invoice for a Claude subscription.</li>
+          <li><strong>Copilot:</strong> AI Credits use the documented $0.01 conversion. Plan allowances, discounts, taxes, and actual additional charges are not modeled.</li>
+          <li><strong>Ollama Cloud:</strong> selected candidates use bundled <a href="https://ollama.com/pricing" target="_blank" rel="noopener noreferrer">peak reference API rates</a> retrieved 2026-11-22. For example, GPT-OSS 120B uses $0.15 input and $0.60 output per million tokens. Prices may change and off-peak rates are not assumed. Unknown or partially published rates show unavailable when needed; GitHub credits do not apply. This is not an Ollama account bill, and does not include subscription, local hardware or electricity costs.</li>
+          <li><strong>Token estimates:</strong> GPT-5.3 Codex uses a local OpenAI-family tokenizer. Sonnet uses an approximate four-characters-per-token ratio; Opus 4.8 applies an approximate 1.3 multiplier. These are not provider-authoritative counts.</li>
+          <li><strong>Dynamic totals:</strong> the selected model prices all recorded input, output, and cache tokens, regardless of the original session provider. This is a hypothetical scenario, not actual Ollama usage or billing; Ollama account logs are not fetched. Input and cache-read are treated as separate categories; nonzero cache-write tokens make Ollama costs unavailable because no corresponding rate is published. Selecting Copilot shows GitHub credit equivalents; Claude and Ollama do not. Older reports without a pricing selection retain recorded-model pricing until a model is selected.</li>
+          <li><strong>Unavailable:</strong> means missing pricing or unsupported attribution, not free usage. Loading a saved analysis automatically refreshes prices from its stored counts; incomplete usage details or unknown models still remain unavailable.</li>
+        </ul>
+        <p>Check current official rates at <a href="https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing" target="_blank" rel="noopener noreferrer">GitHub Copilot model pricing</a> and <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer">Anthropic model pricing</a>.</p>
+      </section>
+
+      <section id="dashboard">
+        <h2>8. Dashboard</h2>
+        <p>Run a static analysis to populate the dashboard. It presents repository totals, an executive summary, platform comparisons, language and largest-file charts, plus dynamic usage and optimization summaries when available.</p>
+        <p>Platform comparisons are illustrative estimates, not evidence that each platform was actually used. Microsoft 365 values are workload analogies, not a supported dynamic billing report.</p>
+        <p>Select <strong>Export Full Report to PDF</strong> to include the available analyses, optimization summary, and rendered charts in one report.</p>
+      </section>
+
+      <section id="sessions">
+        <h2>9. Save and load analyses</h2>
+        <p><strong>Save Analyses</strong> and <strong>Load Analyses</strong> appear in both analysis tabs.</p>
+        <ol>
+          <li>Run at least one analysis, then select <strong>Save Analyses</strong>.</li>
+          <li>The app saves a snapshot under <code>Session\&lt;provider&gt;_dd_mm_yyyy_hh_mm_ss\analysis.json</code> in the application root for source runs, or under <code>%LOCALAPPDATA%\AI Usage Analyzer</code> in the packaged app. The status message shows the actual location.</li>
+          <li>To restore it, select <strong>Load Analyses</strong>, choose a <strong>Saved session</strong>, and select <strong>Load Selected</strong>.</li>
+        </ol>
+        <p>The snapshot preserves available static and dynamic reports, optimization results, paths, provider and pricing-model selections, generated-file exclusion, and Deep Analysis selection. Loading replaces the current snapshot; save current work first if you need to keep it.</p>
+        <p>Loading or saving automatically refreshes USD and Copilot credit estimates using stored token counts and the bundled pricing catalog. It does not rescan source files, reread session logs, or rerun cloud optimization. Loading leaves the original saved file unchanged; select <strong>Save Analyses</strong> to keep refreshed prices in a new snapshot. Unknown models or incomplete usage details remain unavailable.</p>
+        <p>Token counts and recommendations remain snapshots of the original analysis. Rerun the relevant analyses if your source files or session logs changed. Verification indicators are transient UI state rather than a separately restored verification history.</p>
+      </section>
+
+      <section id="exports">
+        <h2>10. Export reports</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Screen</th><th scope="col">Available buttons</th><th scope="col">Use for</th></tr></thead>
+            <tbody>
+              <tr><td>Dashboard</td><td>Export Full Report to PDF</td><td>A combined overview with charts.</td></tr>
+              <tr><td>Static Analysis</td><td>Export to Excel; Export to PDF</td><td>Repository size, tokens, model pricing, and file breakdowns.</td></tr>
+              <tr><td>Dynamic Analysis</td><td>Export to PDF; Export to Excel; Export to JSON</td><td>Recorded session usage and cost estimates.</td></tr>
+              <tr><td>Dynamic Analysis</td><td>Export Detailed Session Analysis</td><td>An Excel workbook with details for the reported top sessions.</td></tr>
+              <tr><td>Session flow dialog</td><td>Export tokens to PDF</td><td>The selected session's flow and usage details.</td></tr>
+              <tr><td>Optimization</td><td>Save to Excel; Export to PDF</td><td>Recommendations, projected savings, and current verification statuses.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Downloads are handled by your browser. The suggested download name can include the optimization provider and a timestamp. CSV support exists in the frontend export utilities but is not exposed as a button in the current tabs.</p>
+        <aside class="note"><strong>Export versus save:</strong> use a PDF or workbook to read/share results. Use <strong>Save Analyses</strong> when you want to restore the complete app snapshot later; an exported report is not a replacement for that snapshot.</aside>
+      </section>
+
+      <section id="settings">
+        <h2>11. Settings and tooltips</h2>
+        <h3>About and User Guide</h3>
+        <p>Select the gear icon to the right of Exit to open the Settings popup. Its About section identifies the software and version. Select <strong>Open User Guide</strong> to open <code>USER_GUIDE.html</code> in a new browser tab. The Contact link opens a new email addressed to <code>sem.dev@gmail.com</code> with the subject <code>AI Usage Analizer</code>.</p>
+        <h3>Update API keys</h3>
+        <p>Select <strong>Update Keys</strong> to open the key replacement dialog. Each credential displays <strong>Set</strong> or <strong>Not Set</strong> based on whether the running backend has a non-empty value; <strong>Unknown</strong> means status could not be loaded. Status does not check validity, expiration, or balance. Copilot CLI or GitHub CLI sign-in is separate from the token shown here. Enter a replacement in its masked field and select the adjacent <strong>Apply</strong>; other fields and existing values are unchanged. Existing values are never loaded into the form or returned by the backend. New values are saved to the configured local environment file and applied to the running server immediately. Source runs normally use <code>backend\.env</code>; packaged runs use <code>%LOCALAPPDATA%\AI Usage Analyzer\.env</code>. Treat keys as secrets and do not share screenshots of the dialog while typing.</p>
+        <h3>Analysis preferences</h3>
+        <p><strong>Exclude lockfiles / generated files</strong> controls whether recognized lockfiles contribute to scan totals. Keep it enabled for a clearer view of hand-maintained code, or disable it when those files are relevant to your workload. Rerun static analysis after changing it.</p>
+        <h3>Tooltips and ? popups</h3>
+        <p>Hover over buttons, text inputs, selectors, links, and labeled controls to read their contextual tooltips. Select the small <strong>?</strong> beside a heading or setting for a longer explanation of the data, estimates, and limitations. Help is available throughout Static Analysis, Dynamic Analysis, Dashboard, Optimization, session details, and Settings. Click outside a popup or press <strong>Escape</strong> to close it. Help text explains the interface; it does not change calculations.</p>
+        <p>Controls can be disabled while analysis, loading, saving, or exporting is active. Wait for the operation to finish before changing settings.</p>
+        <p>To print this guide or save it as PDF, use your browser's print command. This HTML file has no external assets, scripts, fonts, or network dependencies; only the documentation links open external pages.</p>
+      </section>
+
+      <section id="privacy">
+        <h2>12. Privacy and limitations</h2>
+        <ul>
+          <li>Static scanning and supported dynamic log parsing are local. Scanned repository code is not executed by those analyses.</li>
+          <li>Cloud optimization can send source excerpts, prompts, and usage context to the selected provider and consume its allowance. Only enable it for repositories and logs you are authorized to share with that provider.</li>
+          <li>Saved snapshots and exports can contain private code, absolute local paths, and chat/prompt data. Store and share them accordingly.</li>
+          <li>Do not assume scanning applies every repository-specific ignore rule or redacts secrets automatically.</li>
+          <li>Usage is limited by the files and log formats that can be parsed. The app is not a complete provider billing ledger.</li>
+          <li>Optimization estimates and CPU/memory/latency effects are projections. Validate changes against your own workloads.</li>
+        </ul>
+      </section>
+
+      <section id="troubleshooting">
+        <h2>13. Troubleshooting</h2>
+        <details open>
+          <summary>Claude Sonnet USD shows Unavailable</summary>
+          <p>Load the saved analysis to automatically refresh pricing without a full rerun. Restart the backend first if you just updated the app. Select a supported coding model to price dynamic totals from recorded counts even when historical model names are unknown. Individual breakdowns with missing cache attribution can remain unavailable. Claude credits are intentionally unavailable.</p>
+        </details>
+        <details open>
+          <summary>No dynamic sessions were found</summary>
+          <p>Use an existing folder containing supported Claude JSONL or legacy Copilot events files, not current Copilot binary databases. Use your actual expanded Windows user path and a directory close to the logs. Try omitting the optional repository filter; sessions without recognized edit/write tools in that directory will be filtered out.</p>
+        </details>
+        <details open>
+          <summary>The Optimization tab asks for both analyses</summary>
+          <p>Run or load both reports first. A model change or clearing static results can invalidate the optimization prerequisite. If only a static report was saved, you still need a dynamic analysis.</p>
+        </details>
+        <details open>
+          <summary>Cloud optimization is unavailable</summary>
+          <p>Read the reported provider error. Check account access, network connectivity, backend credentials, and any configured Copilot model ID. Restart after environment changes. Local fallback recommendations can still be available, but they are not cloud-generated results.</p>
+        </details>
+        <details open>
+          <summary>Tokens or costs differ from the provider bill</summary>
+          <p>Static analysis estimates an input pass, not an entire development session. Local tokenization, incomplete logs, context reuse, cache behavior, output tokens, subscription allowances, and provider pricing changes can all cause differences. Check the report's model and pricing notes.</p>
+        </details>
+        <details open>
+          <summary>The browser cannot reach the app</summary>
+          <p>Check both development-server windows for startup errors. The browser normally uses port 5173 and the frontend proxies API requests to backend port 4000. If the ports differ, check the project configuration. A missing corporate certificate warning should be resolved using your organization's approved CA configuration, never by disabling TLS verification.</p>
+        </details>
+        <details open>
+          <summary>A saved report cannot be loaded</summary>
+          <p>The app rejects incomplete or incompatible snapshots. Select a valid folder created by <strong>Save Analyses</strong>; do not substitute a PDF, workbook, or standalone dynamic JSON export. Preserve the original file and rerun analyses if necessary.</p>
+        </details>
+      </section>
+    </main>
+  </div>
+  <footer>AI Usage Analyzer &middot; User Guide &middot; Estimates support decisions; provider billing remains authoritative.</footer>
+</body>
+</html>
